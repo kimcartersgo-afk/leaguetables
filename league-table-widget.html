@@ -1,0 +1,136 @@
+<!-- Cardiff Allstars FC - Live League Table Widget -->
+<!-- Paste this entire block into your IONOS HTML embed element -->
+<!-- IMPORTANT: Replace YOUR_GITHUB_USERNAME and YOUR_REPO_NAME below with your actual values -->
+<div id="ca-widget" style="font-family:'Segoe UI',Arial,sans-serif;max-width:680px;margin:0 auto;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#111111 0%,#2a2a2a 60%,#ff6a00 100%);padding:18px 20px 14px 20px;text-align:center;">
+    <div style="color:#ff9c40;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">Cardiff &amp; District U15 Division C &bull; 2025/26</div>
+    <div style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:0.5px;line-height:1.2;">Cardiff Allstars Under 15s Orange</div>
+    <div id="ca-updated" style="color:#ff9c40;font-size:11px;margin-top:6px;">League Table &bull; Loading...</div>
+  </div>
+  <!-- Loading state -->
+  <div id="ca-loading" style="background:#fff;padding:40px;text-align:center;color:#888;font-size:14px;">
+    <div style="display:inline-block;width:28px;height:28px;border:3px solid #ddd;border-top-color:#ff6a00;border-radius:50%;animation:ca-spin 0.8s linear infinite;margin-bottom:10px;"></div>
+    <div>Loading league table...</div>
+  </div>
+  <!-- Fallback notice (shown only when live data can't be fetched) -->
+  <div id="ca-error" style="display:none;background:#fff8e8;padding:7px 16px;text-align:center;font-size:11px;color:#a05700;border-top:1px solid #f0d89a;">
+    &#9432; Showing cached data (19 Mar 2026) &mdash; live update pending setup
+  </div>
+  <!-- Table (hidden until loaded) -->
+  <div id="ca-table-wrap" style="display:none;background:#fff;overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:#111111;color:#ffffff;">
+          <th style="padding:9px 8px;text-align:center;width:36px;">Pos</th>
+          <th style="padding:9px 12px;text-align:left;">Club</th>
+          <th style="padding:9px 7px;text-align:center;" title="Matches Played">MP</th>
+          <th style="padding:9px 7px;text-align:center;" title="Wins">W</th>
+          <th style="padding:9px 7px;text-align:center;" title="Draws">D</th>
+          <th style="padding:9px 7px;text-align:center;" title="Losses">L</th>
+          <th style="padding:9px 7px;text-align:center;" title="Goals For">GF</th>
+          <th style="padding:9px 7px;text-align:center;" title="Goals Against">GA</th>
+          <th style="padding:9px 7px;text-align:center;" title="Goal Difference">GD</th>
+          <th style="padding:9px 10px;text-align:center;font-weight:800;" title="Points">Pts</th>
+        </tr>
+      </thead>
+      <tbody id="ca-tbody"></tbody>
+    </table>
+  </div>
+  <!-- Footer legend -->
+  <div id="ca-footer" style="display:none;background:#f5f5f5;padding:8px 16px;flex-wrap:wrap;gap:12px;font-size:11px;color:#666;border-top:1px solid #ddd;">
+    <span><b>MP</b> Matches Played</span>
+    <span><b>W</b> Wins</span>
+    <span><b>D</b> Draws</span>
+    <span><b>L</b> Losses</span>
+    <span><b>GF</b> Goals For</span>
+    <span><b>GA</b> Goals Against</span>
+    <span><b>GD</b> Goal Difference</span>
+    <span><b>Pts</b> Points</span>
+  </div>
+  <!-- Credit footer -->
+  <div style="background:#111111;padding:7px 16px;text-align:center;font-size:10px;color:#999;">
+    Source: <a href="https://comet.faw.cymru/resources/jsf/competition/index.xhtml?id=95758708" target="_blank" style="color:#ff9c40;text-decoration:none;">FAW Comet</a> &bull; Cardiff Allstars FC
+  </div>
+</div>
+<style>@keyframes ca-spin { to { transform: rotate(360deg); } }</style>
+<script>
+(function() {
+  // ==============================================================
+  // CONFIGURATION — update DATA_URL after setting up GitHub
+  // ==============================================================
+  var DATA_URL = 'https://raw.githubusercontent.com/kimcartersgo-afk/
+leaguetables/main/data/league-table.json';
+  var REFRESH_MS = 5 * 60 * 1000; // auto-refresh every 5 minutes
+  // Fallback: always show this table if live data can't be fetched
+  var FALLBACK = {
+    updated: '2026-03-19T12:34:00Z',
+    table: [
+      { pos:1, team:'Cardiff Allstars FC U15 Orange', mp:8,  w:8, d:0, l:0, gf:49, ga:7,  gd:42,  pts:24 },
+      { pos:2, team:'Caerau Ely C FC U15 Red',        mp:7,  w:6, d:0, l:1, gf:41, ga:27, gd:14,  pts:18 },
+      { pos:3, team:'Tiger Bay FC U15s',              mp:5,  w:5, d:0, l:0, gf:37, ga:8,  gd:29,  pts:15 },
+      { pos:4, team:'AFC Whitchurch U15 Blue',        mp:7,  w:3, d:0, l:4, gf:13, ga:26, gd:-13, pts:9  },
+      { pos:5, team:'Ely Rangers FC U15',             mp:7,  w:2, d:2, l:3, gf:11, ga:18, gd:-7,  pts:8  },
+      { pos:6, team:'Llanishen FC U15',               mp:11, w:2, d:2, l:7, gf:20, ga:42, gd:-22, pts:8  },
+      { pos:7, team:'Ty Celyn Junior FC U15',         mp:6,  w:0, d:1, l:5, gf:18, ga:32, gd:-14, pts:1  },
+      { pos:8, team:'Pentyrch Rangers U15',           mp:7,  w:0, d:1, l:6, gf:8,  ga:37, gd:-29, pts:1  }
+    ]
+  };
+  // ==============================================================
+  function timeAgo(iso) {
+    var s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60)   return 'Updated just now';
+    if (s < 120)  return 'Updated 1 minute ago';
+    if (s < 3600) return 'Updated ' + Math.floor(s/60) + ' minutes ago';
+    if (s < 7200) return 'Updated 1 hour ago';
+    return 'Updated ' + Math.floor(s/3600) + ' hours ago';
+  }
+  function gd(v) {
+    return v > 0 ? { t:'+'+v, c:'#1a7a1a' } : v < 0 ? { t:''+v, c:'#c0392b' } : { t:'0', c:'#555' };
+  }
+  function render(data, isFallback) {
+    var tbody = document.getElementById('ca-tbody');
+    tbody.innerHTML = '';
+    data.table.forEach(function(r, i) {
+      var us  = r.team.toLowerCase().indexOf('cardiff allstars') !== -1;
+      var g   = gd(r.gd);
+      var tr  = document.createElement('tr');
+      var p   = us ? '11' : '10';
+      var wc  = r.w >= 4 ? '#1a7a1a' : r.w === 0 ? '#c0392b' : '#333';
+      tr.style.cssText = us
+        ? 'background:linear-gradient(90deg,#fff8ee,#fff3d6);border-left:4px solid #ff6a00;'
+        : (i%2===0?'background:#f8f9ff;':'background:#fff;')+'border-left:4px solid transparent;';
+      tr.innerHTML =
+        '<td style="padding:'+p+'px 8px;text-align:center;color:'+(us?'#ff6a00':'#555')+';font-size:'+(us?'15px':'13px')+';font-weight:'+(us?800:700)+';">' + r.pos + '</td>' +
+        '<td style="padding:'+p+'px 12px;color:'+(us?'#0a1f5c':'#333')+';font-weight:'+(us?800:400)+';">' + (us?'&#11088; ':'') + r.team + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;color:#333;font-weight:'+(us?600:400)+';">' + r.mp + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;color:'+wc+';font-weight:'+(us?700:600)+';">' + r.w + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;color:#333;">' + r.d + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;color:#333;">' + r.l + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;color:#333;">' + r.gf + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;color:#333;">' + r.ga + '</td>' +
+        '<td style="padding:'+p+'px 7px;text-align:center;font-weight:700;color:'+g.c+';">' + g.t + '</td>' +
+        '<td style="padding:'+p+'px 10px;text-align:center;color:'+(us?'#0a1f5c':'#333')+';font-weight:'+(us?800:700)+';font-size:'+(us?'15px':'13px')+';">' + r.pts + '</td>';
+      tbody.appendChild(tr);
+    });
+    document.getElementById('ca-loading').style.display    = 'none';
+    document.getElementById('ca-table-wrap').style.display = 'block';
+    document.getElementById('ca-footer').style.display     = 'flex';
+    document.getElementById('ca-error').style.display      = isFallback ? 'block' : 'none';
+    document.getElementById('ca-updated').textContent      = 'League Table \u2022 ' + timeAgo(data.updated);
+  }
+  function load() {
+    var x = new XMLHttpRequest();
+    x.open('GET', DATA_URL + '?t=' + Date.now(), true);
+    x.onload  = function() {
+      try { render(JSON.parse(x.responseText), false); }
+      catch(e) { render(FALLBACK, true); }
+    };
+    x.onerror = function() { render(FALLBACK, true); };
+    x.send();
+  }
+  load();
+  setInterval(load, REFRESH_MS);
+})();
+</script>
+<!-- End Cardiff Allstars Live League Table Widget -->
