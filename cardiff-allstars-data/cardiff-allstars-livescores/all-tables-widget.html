@@ -1,0 +1,234 @@
+<!-- Cardiff Allstars FC - All Teams League Tables Widget -->
+<!-- Paste this entire block into your IONOS HTML embed element -->
+<!-- IMPORTANT: Replace YOUR_GITHUB_USERNAME and YOUR_REPO_NAME with your actual values -->
+
+<div id="ca-all" style="font-family:'Segoe UI',Arial,sans-serif;max-width:720px;margin:0 auto;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.2);">
+
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#111111 0%,#2a2a2a 60%,#ff6a00 100%);padding:16px 20px 0 20px;text-align:center;">
+    <div style="color:#ff9c40;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">Cardiff Allstars FC &bull; League Tables 2025/26</div>
+    <div style="color:#ffffff;font-size:20px;font-weight:800;letter-spacing:0.5px;">Cardiff Allstars FC</div>
+
+    <!-- Tab buttons -->
+    <div id="ca-tabs" style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:14px;">
+      <button onclick="caSwitch('u15-orange')" id="tab-u15-orange" style="background:#ff6a00;color:#fff;border:none;padding:7px 13px;border-radius:6px 6px 0 0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">U15 Orange</button>
+      <button onclick="caSwitch('u15-black')"  id="tab-u15-black"  style="background:#333;color:#aaa;border:none;padding:7px 13px;border-radius:6px 6px 0 0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">U15 Black</button>
+      <button onclick="caSwitch('youth')"       id="tab-youth"      style="background:#333;color:#aaa;border:none;padding:7px 13px;border-radius:6px 6px 0 0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">Youth</button>
+      <button onclick="caSwitch('first-team')"  id="tab-first-team" style="background:#333;color:#aaa;border:none;padding:7px 13px;border-radius:6px 6px 0 0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">First Team</button>
+      <button onclick="caSwitch('reserves')"    id="tab-reserves"   style="background:#333;color:#aaa;border:none;padding:7px 13px;border-radius:6px 6px 0 0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">Reserves</button>
+    </div>
+  </div>
+
+  <!-- Panel containers (one per team) -->
+  <div id="panel-u15-orange" class="ca-panel"></div>
+  <div id="panel-u15-black"  class="ca-panel" style="display:none;"></div>
+  <div id="panel-youth"      class="ca-panel" style="display:none;"></div>
+  <div id="panel-first-team" class="ca-panel" style="display:none;"></div>
+  <div id="panel-reserves"   class="ca-panel" style="display:none;"></div>
+
+  <!-- Credit footer -->
+  <div style="background:#111;padding:7px 16px;text-align:center;font-size:10px;color:#999;">
+    Source: <a href="https://comet.faw.cymru" target="_blank" style="color:#ff9c40;text-decoration:none;">FAW Comet</a> &bull; Cardiff Allstars FC
+  </div>
+
+</div>
+
+<style>
+  @keyframes ca-spin { to { transform: rotate(360deg); } }
+  #ca-all * { box-sizing: border-box; }
+</style>
+
+<script>
+(function () {
+
+  // ================================================================
+  // CONFIGURATION — replace YOUR_GITHUB_USERNAME and YOUR_REPO_NAME
+  // ================================================================
+  var BASE = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/data/';
+
+  var TEAMS = {
+    'u15-orange': {
+      file:     BASE + 'league-table.json',
+      label:    'Cardiff Allstars Under 15s Orange',
+      division: 'Cardiff & District U15 Division C 25/26',
+      fallback: [
+        { pos:1, team:'Cardiff Allstars FC U15 Orange', mp:8,  w:8, d:0, l:0, gf:49, ga:7,  gd:42,  pts:24 },
+        { pos:2, team:'Caerau Ely C FC U15 Red',        mp:7,  w:6, d:0, l:1, gf:41, ga:27, gd:14,  pts:18 },
+        { pos:3, team:'Tiger Bay FC U15s',              mp:5,  w:5, d:0, l:0, gf:37, ga:8,  gd:29,  pts:15 },
+        { pos:4, team:'AFC Whitchurch U15 Blue',        mp:7,  w:3, d:0, l:4, gf:13, ga:26, gd:-13, pts:9  },
+        { pos:5, team:'Ely Rangers FC U15',             mp:7,  w:2, d:2, l:3, gf:11, ga:18, gd:-7,  pts:8  },
+        { pos:6, team:'Llanishen FC U15',               mp:11, w:2, d:2, l:7, gf:20, ga:42, gd:-22, pts:8  },
+        { pos:7, team:'Ty Celyn Junior FC U15',         mp:6,  w:0, d:1, l:5, gf:18, ga:32, gd:-14, pts:1  },
+        { pos:8, team:'Pentyrch Rangers U15',           mp:7,  w:0, d:1, l:6, gf:8,  ga:37, gd:-29, pts:1  }
+      ],
+      fallbackDate: '2026-03-19T12:34:00Z'
+    },
+    'u15-black': {
+      file:     BASE + 'u15-black.json',
+      label:    'Cardiff Allstars Under 15s Black',
+      division: 'Cardiff & District U15 Division 25/26',
+      fallback: [],
+      fallbackDate: null
+    },
+    'youth': {
+      file:     BASE + 'youth.json',
+      label:    'Cardiff Allstars FC Youth',
+      division: 'Cardiff & District Youth Division 25/26',
+      fallback: [],
+      fallbackDate: null
+    },
+    'first-team': {
+      file:     BASE + 'first-team.json',
+      label:    'Cardiff Allstars FC',
+      division: 'Cardiff & District Division 25/26',
+      fallback: [],
+      fallbackDate: null
+    },
+    'reserves': {
+      file:     BASE + 'reserves.json',
+      label:    'Cardiff Allstars FC Reserves',
+      division: 'Cardiff & District Reserves Division 25/26',
+      fallback: [],
+      fallbackDate: null
+    }
+  };
+  // ================================================================
+
+  var loaded = {};
+  var active = 'u15-orange';
+
+  function timeAgo(iso) {
+    if (!iso) return 'Data pending first scrape';
+    var s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60)   return 'Updated just now';
+    if (s < 120)  return 'Updated 1 minute ago';
+    if (s < 3600) return 'Updated ' + Math.floor(s / 60) + ' minutes ago';
+    if (s < 7200) return 'Updated 1 hour ago';
+    return 'Updated ' + Math.floor(s / 3600) + ' hours ago';
+  }
+
+  function gd(v) {
+    return v > 0 ? { t: '+' + v, c: '#1a7a1a' } : v < 0 ? { t: '' + v, c: '#c0392b' } : { t: '0', c: '#555' };
+  }
+
+  function buildPanel(key, data, isFallback) {
+    var cfg = TEAMS[key];
+    var rows = data ? data.table : cfg.fallback;
+    var updated = data ? data.updated : cfg.fallbackDate;
+    var division = (data && data.division) ? data.division : cfg.division;
+
+    var html = '';
+
+    // Sub-header
+    html += '<div style="background:#1a1a1a;padding:10px 16px;text-align:center;">'
+          + '<div style="color:#ff9c40;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">' + division + '</div>'
+          + '<div style="color:#bbb;font-size:10px;margin-top:3px;">' + timeAgo(updated) + '</div>'
+          + '</div>';
+
+    // Fallback notice
+    if (isFallback && rows.length > 0) {
+      html += '<div style="background:#fff8e8;padding:6px 16px;text-align:center;font-size:11px;color:#a05700;border-bottom:1px solid #f0d89a;">&#9432; Showing cached data &mdash; live update pending setup</div>';
+    }
+
+    // Empty state
+    if (!rows || rows.length === 0) {
+      html += '<div style="background:#fff;padding:36px;text-align:center;color:#888;font-size:13px;">Data will appear after the scraper runs for the first time.</div>';
+    } else {
+      // Table
+      html += '<div style="background:#fff;overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">'
+            + '<thead><tr style="background:#111111;color:#fff;">'
+            + '<th style="padding:9px 8px;text-align:center;width:36px;">Pos</th>'
+            + '<th style="padding:9px 12px;text-align:left;">Club</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Matches Played">MP</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Wins">W</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Draws">D</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Losses">L</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Goals For">GF</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Goals Against">GA</th>'
+            + '<th style="padding:9px 7px;text-align:center;" title="Goal Difference">GD</th>'
+            + '<th style="padding:9px 10px;text-align:center;font-weight:800;" title="Points">Pts</th>'
+            + '</tr></thead><tbody>';
+
+      rows.forEach(function (r, i) {
+        var us = r.team.toLowerCase().indexOf('cardiff allstars') !== -1;
+        var g  = gd(r.gd);
+        var p  = us ? '11' : '10';
+        var wc = r.w >= 4 ? '#1a7a1a' : r.w === 0 ? '#c0392b' : '#333';
+        var bg = us
+          ? 'background:linear-gradient(90deg,#fff8ee,#fff3d6);border-left:4px solid #ff6a00;'
+          : (i % 2 === 0 ? 'background:#f8f8f8;' : 'background:#fff;') + 'border-left:4px solid transparent;';
+
+        html += '<tr style="' + bg + '">'
+          + '<td style="padding:' + p + 'px 8px;text-align:center;color:' + (us ? '#ff6a00' : '#555') + ';font-size:' + (us ? '15' : '13') + 'px;font-weight:' + (us ? 800 : 700) + ';">' + r.pos + '</td>'
+          + '<td style="padding:' + p + 'px 12px;color:' + (us ? '#111' : '#333') + ';font-weight:' + (us ? 800 : 400) + ';">' + (us ? '&#11088; ' : '') + r.team + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;color:#333;font-weight:' + (us ? 600 : 400) + ';">' + r.mp + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;color:' + wc + ';font-weight:' + (us ? 700 : 600) + ';">' + r.w + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;color:#333;">' + r.d + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;color:#333;">' + r.l + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;color:#333;">' + r.gf + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;color:#333;">' + r.ga + '</td>'
+          + '<td style="padding:' + p + 'px 7px;text-align:center;font-weight:700;color:' + g.c + ';">' + g.t + '</td>'
+          + '<td style="padding:' + p + 'px 10px;text-align:center;color:' + (us ? '#111' : '#333') + ';font-weight:' + (us ? 800 : 700) + ';font-size:' + (us ? '15' : '13') + 'px;">' + r.pts + '</td>'
+          + '</tr>';
+      });
+
+      html += '</tbody></table></div>'
+            + '<div style="background:#f5f5f5;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#666;border-top:1px solid #ddd;">'
+            + '<span><b>MP</b> Matches Played</span><span><b>W</b> Wins</span><span><b>D</b> Draws</span>'
+            + '<span><b>L</b> Losses</span><span><b>GF</b> Goals For</span><span><b>GA</b> Goals Against</span>'
+            + '<span><b>GD</b> Goal Difference</span><span><b>Pts</b> Points</span>'
+            + '</div>';
+    }
+
+    document.getElementById('panel-' + key).innerHTML = html;
+  }
+
+  function loadTeam(key) {
+    var cfg = TEAMS[key];
+    var panel = document.getElementById('panel-' + key);
+
+    // Show loading spinner
+    panel.innerHTML = '<div style="background:#fff;padding:40px;text-align:center;color:#888;font-size:14px;">'
+      + '<div style="display:inline-block;width:24px;height:24px;border:3px solid #ddd;border-top-color:#ff6a00;border-radius:50%;animation:ca-spin 0.8s linear infinite;margin-bottom:8px;"></div>'
+      + '<div>Loading...</div></div>';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', cfg.file + '?t=' + Date.now(), true);
+    xhr.onload = function () {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        buildPanel(key, data, false);
+      } catch (e) {
+        buildPanel(key, null, true);
+      }
+    };
+    xhr.onerror = function () { buildPanel(key, null, true); };
+    xhr.send();
+  }
+
+  window.caSwitch = function (key) {
+    // Update tabs styling
+    Object.keys(TEAMS).forEach(function (k) {
+      var btn = document.getElementById('tab-' + k);
+      btn.style.background = k === key ? '#ff6a00' : '#333';
+      btn.style.color      = k === key ? '#fff' : '#aaa';
+    });
+    // Show/hide panels
+    Object.keys(TEAMS).forEach(function (k) {
+      document.getElementById('panel-' + k).style.display = k === key ? 'block' : 'none';
+    });
+    active = key;
+    // Load data if not yet loaded (or refresh if previously loaded)
+    loadTeam(key);
+  };
+
+  // Initial load
+  caSwitch('u15-orange');
+
+  // Auto-refresh active tab every 5 minutes
+  setInterval(function () { loadTeam(active); }, 5 * 60 * 1000);
+
+})();
+</script>
+
+<!-- End Cardiff Allstars All Teams Widget -->
